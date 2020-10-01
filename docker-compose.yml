@@ -1,0 +1,61 @@
+version: "3.3"
+services:
+  test-nginx:
+    image: nginx
+    container_name: test-nginx
+    build:
+      context: ./docker-containers/nginx
+      dockerfile: 'Dockerfile'
+    environment:
+      - TZ=Europe/Moscow
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./front:/var/www/front
+      - ./docker-containers/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker-containers/nginx/conf/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - test-node
+    restart: on-failure
+    networks:
+      - test-web
+
+  test-node:
+    container_name: test-node
+    build:
+      context: .
+      dockerfile: './docker-containers/nodejs/Dockerfile'
+    volumes:
+      - ./api:/var/www/api
+      - /var/www/api/node_modules
+      - ./front:/var/www/front
+      - /var/www/front/node_modules
+    working_dir: /var/www
+    networks:
+      - test-web
+    entrypoint: ['sh', '/docker-entrypoint.sh']
+    ports:
+      - 3000:3000
+      - 8010:8010
+
+  test-db:
+    container_name: test-db
+    image: mariadb:10.3.22
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    environment:
+      TZ: Europe/Moscow
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data/:/docker-entrypoint-initdb.d
+    restart: on-failure
+    networks:
+      - test-web
+
+networks:
+  test-web:
