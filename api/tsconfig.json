@@ -19,7 +19,16 @@
     "outDir": "./build",
     "allowJs": true,
     "noEmit": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve"
+//    "baseUrl": ".",
+//    "paths": {
+//      "Components/*": ["../front/src/js/components/*"]
+//    }
   },
   "include": [
     "./src/**/*"
