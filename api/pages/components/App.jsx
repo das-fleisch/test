@@ -22,7 +22,8 @@ export default function App() {
             })
     };
 
-    if(data == null) get('/user/request');
+
+    //if(data == null) setData(d);
 
     return (
         <div>
