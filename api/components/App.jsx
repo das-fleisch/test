@@ -24,7 +24,7 @@ export default function App(props) {
             })
     };
 
-    if(data == null) get('/user/request');
+    if(data == null && props.data == null) get('/user/request');
 
     return (
         <div>
