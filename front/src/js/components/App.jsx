@@ -1,10 +1,12 @@
 import React, { useState , useEffect } from 'react';
 import API from '../API'
-import UserInput from "./User/UserInput";
-import UserText from "./User/UserText";
+import UserInput from "Components/User/UserInput";
+import UserText from "Components/User/UserText";
 
-export default function App() {
+export default function App(props) {
     const [data, setData] = useState(null);
+
+    if(data == null && props.data) setData(props.data);
 
     const get = (path, params) => {
         const api = new API('http://localhost:3000/api');

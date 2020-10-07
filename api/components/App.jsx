@@ -3,8 +3,10 @@ import API from './API'
 import UserInput from "./User/UserInput";
 import UserText from "./User/UserText";
 
-export default function App() {
+export default function App(props) {
     const [data, setData] = useState(null);
+
+    if(data == null && props.data) setData(props.data);
 
     const get = (path, params) => {
         const api = new API('http://localhost:3000/api');
@@ -22,8 +24,7 @@ export default function App() {
             })
     };
 
-
-    //if(data == null) setData(d);
+    if(data == null) get('/user/request');
 
     return (
         <div>
